@@ -3,6 +3,8 @@ package com.ong.registrovoluntariado.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Set;
 
@@ -37,6 +39,15 @@ public class Activity {
 
     @NotNull
     private Integer requiredVolunteers;
+
+    @NotNull
+    private Integer durationHours;
+
+    @NotNull
+    private LocalDate startDate;
+
+    @NotNull
+    private LocalDate endDate;
 
     private boolean active = true;
 
@@ -105,6 +116,30 @@ public class Activity {
 
     public void setRequiredVolunteers(Integer requiredVolunteers) {
         this.requiredVolunteers = requiredVolunteers;
+    }
+
+    public Integer getDurationHours() {
+        return durationHours;
+    }
+
+    public void setDurationHours(Integer durationHours) {
+        this.durationHours = durationHours;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDate getEndDate() {
+        return endDate;
+    }
+
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
     }
 
     public boolean isActive() {

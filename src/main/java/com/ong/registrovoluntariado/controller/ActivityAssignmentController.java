@@ -52,16 +52,31 @@ public class ActivityAssignmentController {
         return ResponseEntity.ok(assignments);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/{id}/cancel")
     @PreAuthorize("hasRole('COORDINATOR') or hasRole('ADMIN')")
-    public ResponseEntity<ActivityAssignment> updateAssignment(@PathVariable Long id,
-                                                              @Valid @RequestBody ActivityAssignment assignment) {
+    public ResponseEntity<ActivityAssignment> cancelAssignment(@PathVariable Long id,
+                                                              @RequestParam String reason,
+                                                              @AuthenticationPrincipal User user) {
         try {
-            ActivityAssignment updated = assignmentService.updateAssignment(id, assignment);
-            return ResponseEntity.ok(updated);
+            ActivityAssignment cancelled = assignmentService.cancelAssignment(id, reason, user);
+            return ResponseEntity.ok(cancelled);
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(null);
         }
+    }
+
+    @GetMapping("/cancelled")
+    @PreAuthorize("hasRole('COORDINATOR') or hasRole('ADMIN')")
+    public ResponseEntity<List<ActivityAssignment>> getCancelledAssignments() {
+        List<ActivityAssignment> assignments = assignmentService.getCancelledAssignments();
+        return ResponseEntity.ok(assignments);
+    }
+
+    @GetMapping("/active")
+    @PreAuthorize("hasRole('COORDINATOR') or hasRole('ADMIN')")
+    public ResponseEntity<List<ActivityAssignment>> getActiveAssignments() {
+        List<ActivityAssignment> assignments = assignmentService.getActiveAssignments();
+        return ResponseEntity.ok(assignments);
     }
 
     public static class AssignmentRequest {

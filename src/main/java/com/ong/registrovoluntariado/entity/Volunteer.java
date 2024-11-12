@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -118,5 +119,21 @@ public class Volunteer {
 
     public void setUser(User user) {
         this.user = user;
+    }
+
+    public String getFirstName() {
+        if (fullName != null && !fullName.trim().isEmpty()) {
+            String[] parts = fullName.trim().split("\\s+");
+            return parts.length > 0 ? parts[0] : "";
+        }
+        return "";
+    }
+
+    public String getLastName() {
+        if (fullName != null && !fullName.trim().isEmpty()) {
+            String[] parts = fullName.trim().split("\\s+");
+            return parts.length > 1 ? parts[parts.length - 1] : "";
+        }
+        return "";
     }
 }

@@ -66,21 +66,42 @@ public class ActivityAssignmentService {
     }
 
     @Transactional
-    public ActivityAssignment updateAssignment(Long id, ActivityAssignment updatedAssignment) {
-        Optional<ActivityAssignment> existingOpt = assignmentRepository.findById(id);
-        if (existingOpt.isEmpty()) {
+    public ActivityAssignment cancelAssignment(Long assignmentId, String reason, User cancelledBy) {
+        Optional<ActivityAssignment> assignmentOpt = assignmentRepository.findById(assignmentId);
+        if (assignmentOpt.isEmpty()) {
             throw new RuntimeException("Assignment not found");
         }
-        ActivityAssignment existing = existingOpt.get();
 
-        if (updatedAssignment.getStartDate().isAfter(updatedAssignment.getEndDate())) {
-            throw new RuntimeException("End date must be after start date");
+        ActivityAssignment assignment = assignmentOpt.get();
+
+        // Validar que la actividad no haya empezado
+        if (assignment.getActivity().getStartDate().isBefore(LocalDate.now())) {
+            throw new RuntimeException("Cannot cancel assignment for activity that has already started");
         }
 
-        existing.setStartDate(updatedAssignment.getStartDate());
-        existing.setEndDate(updatedAssignment.getEndDate());
-        existing.setStatus(updatedAssignment.getStatus());
+        // Validar que no esté ya cancelada
+        if ("CANCELLED".equals(assignment.getStatus())) {
+            throw new RuntimeException("Assignment is already cancelled");
+        }
 
-        return assignmentRepository.save(existing);
+        assignment.setStatus("CANCELLED");
+        assignment.setCancellationReason(reason);
+        assignment.setCancelledBy(cancelledBy);
+        assignment.setCancellationDate(LocalDate.now());
+
+        ActivityAssignment saved = assignmentRepository.save(assignment);
+
+        // Send cancellation notification
+        notificationService.sendAssignmentCancellationNotification(saved);
+
+        return saved;
+    }
+
+    public List<ActivityAssignment> getCancelledAssignments() {
+        return assignmentRepository.findByStatus("CANCELLED");
+    }
+
+    public List<ActivityAssignment> getActiveAssignments() {
+        return assignmentRepository.findByStatusNot("CANCELLED");
     }
 }

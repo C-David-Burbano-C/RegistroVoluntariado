@@ -50,6 +50,32 @@ public class NotificationService {
         sendEmail(notification);
     }
 
+    @Transactional
+    public void sendAssignmentCancellationNotification(ActivityAssignment assignment) {
+        User recipient = assignment.getVolunteer().getUser();
+        String subject = "Actividad cancelada: " + assignment.getActivity().getName();
+        String message = String.format(
+            "Hola %s,\n\nLa actividad '%s' a la que estabas asignado ha sido cancelada.\n" +
+            "Razón: %s\nFecha de cancelación: %s\n\n" +
+            "Si tienes alguna pregunta, contacta con el coordinador.",
+            assignment.getVolunteer().getFullName(),
+            assignment.getActivity().getName(),
+            assignment.getCancellationReason() != null ? assignment.getCancellationReason() : "No especificada",
+            assignment.getCancellationDate()
+        );
+
+        Notification notification = new Notification();
+        notification.setRecipient(recipient);
+        notification.setSubject(subject);
+        notification.setMessage(message);
+        notification.setType(Notification.Type.EMAIL);
+        notification.setRelatedActivity(assignment.getActivity());
+
+        notificationRepository.save(notification);
+
+        sendEmail(notification);
+    }
+
     @Async
     public void sendEmail(Notification notification) {
         try {

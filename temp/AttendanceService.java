@@ -24,7 +24,7 @@ public class AttendanceService {
     private ActivityAssignmentRepository assignmentRepository;
 
     @Transactional
-    public Attendance recordAttendance(Long assignmentId, LocalDate date, String status,
+    public Attendance recordAttendance(Long assignmentId, LocalDate date, Attendance.Status status,
                                      LocalTime checkInTime, LocalTime checkOutTime,
                                      String observations, Attendance.PerformanceLevel performanceLevel,
                                      User recordedBy) {

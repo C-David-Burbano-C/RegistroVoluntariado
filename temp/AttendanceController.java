@@ -63,7 +63,7 @@ public class AttendanceController {
     public static class AttendanceRequest {
         private Long assignmentId;
         private LocalDate date;
-        private String status;
+        private Attendance.Status status;
         private LocalTime checkInTime;
         private LocalTime checkOutTime;
         private String observations;
@@ -74,8 +74,8 @@ public class AttendanceController {
         public void setAssignmentId(Long assignmentId) { this.assignmentId = assignmentId; }
         public LocalDate getDate() { return date; }
         public void setDate(LocalDate date) { this.date = date; }
-        public String getStatus() { return status; }
-        public void setStatus(String status) { this.status = status; }
+        public Attendance.Status getStatus() { return status; }
+        public void setStatus(Attendance.Status status) { this.status = status; }
         public LocalTime getCheckInTime() { return checkInTime; }
         public void setCheckInTime(LocalTime checkInTime) { this.checkInTime = checkInTime; }
         public LocalTime getCheckOutTime() { return checkOutTime; }

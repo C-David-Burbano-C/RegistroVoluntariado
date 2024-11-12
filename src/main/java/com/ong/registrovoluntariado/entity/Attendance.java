@@ -2,6 +2,7 @@ package com.ong.registrovoluntariado.entity;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -26,8 +27,7 @@ public class Attendance {
 
     private LocalTime checkOutTime;
 
-    @Enumerated(EnumType.STRING)
-    private Status status;
+    private String status;
 
     @Size(max = 500)
     private String observations;
@@ -91,11 +91,11 @@ public class Attendance {
         this.checkOutTime = checkOutTime;
     }
 
-    public Status getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -129,5 +129,13 @@ public class Attendance {
 
     public void setRecordedBy(User recordedBy) {
         this.recordedBy = recordedBy;
+    }
+
+    public Activity getActivity() {
+        return assignment != null ? assignment.getActivity() : null;
+    }
+
+    public Volunteer getVolunteer() {
+        return assignment != null ? assignment.getVolunteer() : null;
     }
 }

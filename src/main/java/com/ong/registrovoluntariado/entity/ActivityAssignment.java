@@ -32,8 +32,7 @@ public class ActivityAssignment {
     @NotNull
     private LocalDate endDate;
 
-    @Enumerated(EnumType.STRING)
-    private Status status = Status.PENDING;
+    private String status = "PENDING";
 
     private LocalDateTime createdAt = LocalDateTime.now();
 
@@ -41,9 +40,14 @@ public class ActivityAssignment {
     @JoinColumn(name = "assigned_by")
     private User assignedBy;
 
-    public enum Status {
-        PENDING, IN_PROGRESS, COMPLETED, CANCELLED
-    }
+    @Column(length = 500)
+    private String cancellationReason;
+
+    @ManyToOne
+    @JoinColumn(name = "cancelled_by")
+    private User cancelledBy;
+
+    private LocalDate cancellationDate;
 
     // Getters and setters
 
@@ -95,11 +99,11 @@ public class ActivityAssignment {
         this.endDate = endDate;
     }
 
-    public Status getStatus() {
+    public String getStatus() {
         return status;
     }
 
-    public void setStatus(Status status) {
+    public void setStatus(String status) {
         this.status = status;
     }
 
@@ -117,5 +121,29 @@ public class ActivityAssignment {
 
     public void setAssignedBy(User assignedBy) {
         this.assignedBy = assignedBy;
+    }
+
+    public String getCancellationReason() {
+        return cancellationReason;
+    }
+
+    public void setCancellationReason(String cancellationReason) {
+        this.cancellationReason = cancellationReason;
+    }
+
+    public User getCancelledBy() {
+        return cancelledBy;
+    }
+
+    public void setCancelledBy(User cancelledBy) {
+        this.cancelledBy = cancelledBy;
+    }
+
+    public LocalDate getCancellationDate() {
+        return cancellationDate;
+    }
+
+    public void setCancellationDate(LocalDate cancellationDate) {
+        this.cancellationDate = cancellationDate;
     }
 }
