@@ -23,10 +23,10 @@
 hs_err_pid*
 replay_pid*
 
-# Eclipse
-.project
-.classpath
-.settings/
+# Eclipse - Keep configuration files but ignore local settings
+bin/
+.metadata
+.recommenders
 
 # IntelliJ
 .idea/
@@ -41,10 +41,12 @@ replay_pid*
 .DS_Store
 Thumbs.db
 
-# Documentation
+# Documentation - NO DEBE ESTAR EN GITHUB
 mockups_modern/
 ESCENARIOS_DE_CALIDAD.md
 HISTORIAS_DE_USUARIO.md
+README_ECLIPSE.md
+*.md
 
 # Maven
 target/
@@ -52,3 +54,6 @@ target/
 # H2 Database
 *.db
 *.trace.db
+
+# Temporary files
+temp/

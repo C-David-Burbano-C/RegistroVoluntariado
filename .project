@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>ResgistroVoluntariado</name>
-	<comment></comment>
+	<name>RegistroVoluntariado</name>
+	<comment>Sistema de Registro de Voluntariado - Proyecto Spring Boot</comment>
 	<projects>
 	</projects>
 	<buildSpec>
@@ -10,9 +10,20 @@
 			<arguments>
 			</arguments>
 		</buildCommand>
+		<buildCommand>
+			<name>org.eclipse.m2e.core.maven2Builder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
+		<buildCommand>
+			<name>org.springframework.ide.eclipse.boot.validation.springbootbuilder</name>
+			<arguments>
+			</arguments>
+		</buildCommand>
 	</buildSpec>
 	<natures>
 		<nature>org.eclipse.jdt.core.javanature</nature>
 		<nature>org.eclipse.m2e.core.maven2Nature</nature>
+		<nature>org.springframework.ide.eclipse.boot.validation.springbootnature</nature>
 	</natures>
 </projectDescription>

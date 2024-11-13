@@ -1,0 +1,2 @@
+boot.project.name=RegistroVoluntariado
+spring.boot.project.mainType=com.ong.registrovoluntariado.RegistroVoluntariadoApplication
