@@ -1,7 +1,6 @@
 package com.ong.registrovoluntariado.security;
 
 import com.ong.registrovoluntariado.entity.User;
-import com.ong.registrovoluntariado.service.UserService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -9,13 +8,14 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.util.Optional;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -24,7 +24,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private JwtUtil jwtUtil;
 
     @Autowired
-    private UserService userService;
+    private UserDetailsService userDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
@@ -34,17 +34,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
             if (StringUtils.hasText(jwt) && jwtUtil.validateToken(jwt)) {
                 String username = jwtUtil.getUsernameFromToken(jwt);
-                User.Role role = jwtUtil.getRoleFromToken(jwt);
 
-                Optional<User> userOpt = userService.findByUsername(username);
-                if (userOpt.isPresent()) {
-                    User user = userOpt.get();
-                    UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(user, null, user.getAuthorities());
-                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                UsernamePasswordAuthenticationToken authentication =
+                    new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
 
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                }
+                SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         } catch (Exception ex) {
             logger.error("Could not set user authentication in security context", ex);
